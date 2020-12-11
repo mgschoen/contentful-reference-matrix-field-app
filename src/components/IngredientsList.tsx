@@ -61,7 +61,11 @@ const IngredientsList = (props: FieldProps) => {
         setIngredients([
           ...ingredients,
           ...selectedIngredients.map((ingredient) => { 
-            return { amount: '', id: ingredient.sys.id }
+            return {
+              amount: '',
+              id: ingredient.sys.id,
+              key: `${ingredient.sys.id}-${Math.floor(Math.random() * 100000)}`
+            }
           })
         ]);
         props.sdk.field.setValue(ingredients);
@@ -96,7 +100,7 @@ const IngredientsList = (props: FieldProps) => {
         <Table>
           <TableBody>
               {ingredients.map((ingredient, index) => {
-                return <TableRow key={ingredient.id}>
+                return <TableRow key={ingredient.key}>
                   <TableCell>
                       <TextInput 
                         value={ingredient.amount}
