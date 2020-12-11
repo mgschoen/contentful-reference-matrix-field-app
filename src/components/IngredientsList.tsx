@@ -44,7 +44,7 @@ const IngredientsList = (props: FieldProps) => {
       });
       setIngredients(populatedIngredients);
     });
-  }, [ingredients]);
+  }, [ingredients, props.sdk.space]);
 
   // update contentful field value whenever ingredients data changes
   useEffect(() => {
@@ -52,7 +52,7 @@ const IngredientsList = (props: FieldProps) => {
       return { amount: ingredient.amount, id: ingredient.id };
     });
     props.sdk.field.setValue(sanitizedIngredients);
-  }, [ingredients]);
+  }, [ingredients, props.sdk.field]);
 
   // open entry selection dialog and append selected entries to the end of our list
   const onAddButtonClicked = () => {
