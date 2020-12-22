@@ -1,6 +1,37 @@
-This project was bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
+# Contentful Ingredients Field App
 
-## Available Scripts
+This [Contentful App](https://www.contentful.com/developers/docs/extensibility/app-framework/) adds a custom UI that can be used on top of the [JSON Object](https://www.contentful.com/developers/docs/concepts/data-model/) field type and represents a list of ingredients for recipes.
+
+![](./assets/contentful-ingredients-field-demo.gif)
+
+Inspired by [this video](https://www.youtube.com/watch?v=OtmV3TPTbRs) and bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
+
+## Data structure
+
+The data produced by the ingredients field type looks like this:
+
+```json
+[
+    {
+        "amount": "2 tbsp",
+        "id": "4skkkYCvbdHVhRfI5hdW7o"
+    },
+    {
+        "amount": "3 tsp",
+        "id": "2xFnDNGBloZzp59kddJBI6"
+    },
+    {
+        "amount": "200g",
+        "id": "2uqKK4iWHxhlRrGn24OLvy"
+    }
+]
+```
+
+`id` represents a relation to an entry of a collection named `"ingredients"`.
+
+`amount` is an unformatted string holding information about how much to use of the referenced ingredient.
+
+## Development
 
 In the project directory, you can run:
 
@@ -20,14 +51,7 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.
 Your app is ready to be deployed!
 
-## Libraries to use
-
-To make your app look and feel like Contentful use the following libraries:
-
-- [Forma 36](https://f36.contentful.com/) – Contentful's design system
-- [Contentful Field Editors](https://www.contentful.com/developers/docs/extensibility/field-editors/) – Contentful's field editor React components
-
-## Learn More
+## More about Contentful Apps
 
 [Read more](https://www.contentful.com/developers/docs/extensibility/app-framework/create-contentful-app/) and check out the video on how to use the CLI.
 
