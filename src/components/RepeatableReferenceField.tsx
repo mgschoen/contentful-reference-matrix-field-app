@@ -17,9 +17,9 @@ interface FieldProps {
   sdk: FieldExtensionSDK;
 }
 
-const IngredientsList = (props: FieldProps) => {
+const RepeatableReferenceField = (props: FieldProps) => {
   const fieldValue = props.sdk.field.getValue();
-  const [ingredients, setIngredients] = useState(fieldValue || []);
+  const [rows, setRows] = useState(fieldValue || []);
 
   // use contentful's builtin auto-resizer 
   useEffect(() => {
@@ -28,57 +28,57 @@ const IngredientsList = (props: FieldProps) => {
 
   // check for unresolved names and fetch them from contenful if neccessary
   useEffect(() => {
-    const ingredientsWithoutName = ingredients.filter((ingredient) => !ingredient.name);
-    if (!ingredientsWithoutName.length) {
+    const unpopulatedRows = rows.filter((row) => !row.name);
+    if (!unpopulatedRows.length) {
       return;
     }
 
-    const ids = ingredients.map((ingredient) => ingredient.id);
+    const ids = rows.map((row) => row.id);
     props.sdk.space.getEntries({ 'sys.id[in]': ids }).then((queryResult) => {
-      let populatedIngredients = ingredients.map((ingredient) => {
-        const resultForCurrentIngredient = queryResult.items.filter((entry) => entry.sys.id === ingredient.id).pop();
+      let populatedRows = rows.map((row) => {
+        const resultForCurrentRow = queryResult.items.filter((entry) => entry.sys.id === row.id).pop();
         return {
-          name: resultForCurrentIngredient ? resultForCurrentIngredient.fields.title['en-US'] : '',
-          ...ingredient
+          name: resultForCurrentRow ? resultForCurrentRow.fields.title['en-US'] : '',
+          ...row
         }
       });
-      setIngredients(populatedIngredients);
+      setRows(populatedRows);
     });
-  }, [ingredients, props.sdk.space]);
+  }, [rows, props.sdk.space]);
 
-  // update contentful field value whenever ingredients data changes
+  // update contentful field value whenever rows data changes
   useEffect(() => {
-    const sanitizedIngredients = ingredients.map((ingredient) => {
-      return { amount: ingredient.amount, id: ingredient.id };
+    const sanitizedRows = rows.map((row) => {
+      return { amount: row.amount, id: row.id };
     });
-    props.sdk.field.setValue(sanitizedIngredients);
-  }, [ingredients, props.sdk.field]);
+    props.sdk.field.setValue(sanitizedRows);
+  }, [rows, props.sdk.field]);
 
   // open entry selection dialog and append selected entries to the end of our list
   const onAddButtonClicked = () => {
     props.sdk.dialogs.selectMultipleEntries({contentTypes: ['ingredient']})
-      .then((selectedIngredients) => {
-        setIngredients([
-          ...ingredients,
-          ...selectedIngredients.map((ingredient) => { 
+      .then((selectedRows) => {
+        setRows([
+          ...rows,
+          ...selectedRows.map((row) => { 
             return {
               amount: '',
-              id: ingredient.sys.id,
-              key: `${ingredient.sys.id}-${Math.floor(Math.random() * 100000)}`
+              id: row.sys.id,
+              key: `${row.sys.id}-${Math.floor(Math.random() * 100000)}`
             }
           })
         ]);
-        props.sdk.field.setValue(ingredients);
+        props.sdk.field.setValue(rows);
       })
       .catch(() => { /* do nothing */ });
   };
 
   // update ingredients with new amount
-  const onAmountChanged = (e) => {
-    const ingredientIndex = e.target.dataset.index;
-    const updatedIngredients = [...ingredients];
-    updatedIngredients[ingredientIndex].amount = e.target.value;
-    setIngredients(updatedIngredients);
+  const onTextChanged = (e) => {
+    const rowIndex = e.target.dataset.index;
+    const updatedRows = [...rows];
+    updatedRows[rowIndex].amount = e.target.value;
+    setRows(updatedRows);
   }
 
   // remove ingredient from list
@@ -90,27 +90,27 @@ const IngredientsList = (props: FieldProps) => {
     if (actualTarget.id === 'root') {
       return;
     }
-    const ingredientIndex = parseInt(actualTarget.dataset.index);
-    const updatedIngredients = ingredients.filter((_, index) => index !== ingredientIndex);
-    setIngredients(updatedIngredients);
+    const rowIndex = parseInt(actualTarget.dataset.index);
+    const updatedRows = rows.filter((_, index) => index !== rowIndex);
+    setRows(updatedRows);
   }
 
   return <section>
       <div>
         <Table>
           <TableBody>
-              {ingredients.map((ingredient, index) => {
-                return <TableRow key={ingredient.key}>
+              {rows.map((row, index) => {
+                return <TableRow key={row.key}>
                   <TableCell>
                       <TextInput 
-                        value={ingredient.amount}
+                        value={row.amount}
                         placeholder="Amount"
                         data-index={index}
-                        onChange={onAmountChanged}>
+                        onChange={onTextChanged}>
                       </TextInput>
                   </TableCell>
                   <TableCell style={{ width: '200px' }}>
-                    {ingredient.name ? ingredient.name :
+                    {row.name ? row.name :
                       <SkeletonContainer svgHeight="20">
                         <SkeletonBodyText numberOfLines="1"></SkeletonBodyText>
                       </SkeletonContainer>
@@ -139,4 +139,4 @@ const IngredientsList = (props: FieldProps) => {
     </section>;
 };
 
-export default IngredientsList;
+export default RepeatableReferenceField;

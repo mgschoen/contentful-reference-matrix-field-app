@@ -11,7 +11,7 @@ import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
 import './index.css';
 
-import IngredientsList from './components/IngredientsList';
+import RepeatableReferenceField from './components/RepeatableReferenceField';
 
 import LocalhostWarning from './components/LocalhostWarning';
 
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'development' && window.self === window.top) {
     const ComponentLocationSettings = [
       {
         location: locations.LOCATION_ENTRY_FIELD,
-        component: <IngredientsList sdk={(sdk as unknown) as FieldExtensionSDK} />
+        component: <RepeatableReferenceField sdk={(sdk as unknown) as FieldExtensionSDK} />
       },
     ];
 
