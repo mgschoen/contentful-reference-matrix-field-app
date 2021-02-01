@@ -20,6 +20,13 @@ interface FieldProps {
 const RepeatableReferenceField = (props: FieldProps) => {
   const fieldValue = props.sdk.field.getValue();
   const [rows, setRows] = useState(fieldValue || []);
+  const instanceParameters = props.sdk.parameters.instance;
+  const referenceKey = instanceParameters.referenceKey || 'id';
+  const textKey = instanceParameters.textKey || 'text';
+  const textLabel = instanceParameters.textLabel || 'Text';
+  const contentTypes = instanceParameters.contentTypes
+    ? instanceParameters.contentTypes.split(/\s*,\s*/g)
+    : null;
 
   // use contentful's builtin auto-resizer 
   useEffect(() => {
@@ -33,10 +40,10 @@ const RepeatableReferenceField = (props: FieldProps) => {
       return;
     }
 
-    const ids = rows.map((row) => row.id);
-    props.sdk.space.getEntries({ 'sys.id[in]': ids }).then((queryResult) => {
+    const referencedIds = rows.map((row) => row[referenceKey]);
+    props.sdk.space.getEntries({ 'sys.id[in]': referencedIds }).then((queryResult) => {
       let populatedRows = rows.map((row) => {
-        const resultForCurrentRow = queryResult.items.filter((entry) => entry.sys.id === row.id).pop();
+        const resultForCurrentRow = queryResult.items.filter((entry) => entry.sys.id === row[referenceKey]).pop();
         return {
           name: resultForCurrentRow ? resultForCurrentRow.fields.title['en-US'] : '',
           ...row
@@ -44,28 +51,36 @@ const RepeatableReferenceField = (props: FieldProps) => {
       });
       setRows(populatedRows);
     });
-  }, [rows, props.sdk.space]);
+  }, [rows, props.sdk.space, referenceKey]);
 
   // update contentful field value whenever rows data changes
   useEffect(() => {
     const sanitizedRows = rows.map((row) => {
-      return { amount: row.amount, id: row.id };
+      const sanitizedRow = {};
+      sanitizedRow[textKey] = row[textKey];
+      sanitizedRow[referenceKey] = row[referenceKey];
+      return sanitizedRow;
     });
     props.sdk.field.setValue(sanitizedRows);
-  }, [rows, props.sdk.field]);
+  }, [rows, props.sdk.field, referenceKey, textKey]);
 
   // open entry selection dialog and append selected entries to the end of our list
   const onAddButtonClicked = () => {
-    props.sdk.dialogs.selectMultipleEntries({contentTypes: ['ingredient']})
+    const options = {};
+    if (contentTypes) {
+      options.contentTypes = contentTypes;
+    }
+    props.sdk.dialogs.selectMultipleEntries(options)
       .then((selectedRows) => {
         setRows([
           ...rows,
-          ...selectedRows.map((row) => { 
-            return {
-              amount: '',
-              id: row.sys.id,
+          ...selectedRows.map((row) => {
+            const rowData = {
               key: `${row.sys.id}-${Math.floor(Math.random() * 100000)}`
-            }
+            };
+            rowData[textKey] = '';
+            rowData[referenceKey] = row.sys.id;
+            return rowData;
           })
         ]);
         props.sdk.field.setValue(rows);
@@ -77,7 +92,7 @@ const RepeatableReferenceField = (props: FieldProps) => {
   const onTextChanged = (e) => {
     const rowIndex = e.target.dataset.index;
     const updatedRows = [...rows];
-    updatedRows[rowIndex].amount = e.target.value;
+    updatedRows[rowIndex][textKey] = e.target.value;
     setRows(updatedRows);
   }
 
@@ -103,8 +118,8 @@ const RepeatableReferenceField = (props: FieldProps) => {
                 return <TableRow key={row.key}>
                   <TableCell>
                       <TextInput 
-                        value={row.amount}
-                        placeholder="Amount"
+                        value={row[textKey]}
+                        placeholder={textLabel}
                         data-index={index}
                         onChange={onTextChanged}>
                       </TextInput>
