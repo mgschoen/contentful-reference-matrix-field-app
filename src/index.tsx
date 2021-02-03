@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'development' && window.self === window.top) {
     const ComponentLocationSettings = [
       {
         location: locations.LOCATION_ENTRY_FIELD,
-        component: <RepeatableReferenceField sdk={(sdk as unknown) as FieldExtensionSDK} />
+        component: <RepeatableReferenceField sdk={sdk as FieldExtensionSDK} />
       },
     ];
 
