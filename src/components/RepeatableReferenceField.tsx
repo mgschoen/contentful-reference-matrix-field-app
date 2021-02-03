@@ -97,16 +97,8 @@ const RepeatableReferenceField = (props: FieldProps) => {
   }
 
   // remove ingredient from list
-  const onDeleteButtonClicked = (e) => {
-    let actualTarget = e.target;
-    while (!actualTarget.dataset.index || actualTarget.id === 'root') {
-      actualTarget = actualTarget.parentNode;
-    }
-    if (actualTarget.id === 'root') {
-      return;
-    }
-    const rowIndex = parseInt(actualTarget.dataset.index);
-    const updatedRows = rows.filter((_, index) => index !== rowIndex);
+  const onDeleteButtonClicked = (passedRow) => {
+    const updatedRows = rows.filter((row) => row !== passedRow);
     setRows(updatedRows);
   }
 
@@ -135,7 +127,7 @@ const RepeatableReferenceField = (props: FieldProps) => {
                       <EditorToolbarButton 
                         icon="Delete"
                         data-index={index}
-                        onClick={onDeleteButtonClicked}>
+                        onClick={() => onDeleteButtonClicked(row)}>
                       </EditorToolbarButton>
                   </TableCell>
                 </TableRow>;
