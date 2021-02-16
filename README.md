@@ -1,14 +1,27 @@
-# Contentful Ingredients Field App
+# Contentful Reference Matrix Field App
 
-This [Contentful App](https://www.contentful.com/developers/docs/extensibility/app-framework/) adds a custom UI that can be used on top of the [JSON Object](https://www.contentful.com/developers/docs/concepts/data-model/) field type and represents a list of ingredients for recipes.
+This [Contentful App](https://www.contentful.com/developers/docs/extensibility/app-framework/) adds a custom UI that represents a list of references with some associated plain text – such as a list of recipe ingredients with the respective amounts.
 
 ![](./assets/contentful-ingredients-field-demo.gif)
 
 Inspired by [this video](https://www.youtube.com/watch?v=OtmV3TPTbRs) and bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
 
-## Data structure
+## Functionality overview
 
-The data produced by the ingredients field type looks like this:
+* Can be used on JSON Object fields
+* Adds a table-like UI with an entry selection modal
+* Produces data in the form of an array of JSON objects
+* Each object represents a tuple of
+    * a relation to another entry
+    * some arbitrary text
+* The following things can be configured:
+    * JSON keys
+    * Allowed content types for referenced entries
+    * Label for the text field
+
+## Example Data structure
+
+The data produced by the reference matrix field type looks something like this:
 
 ```json
 [
@@ -27,9 +40,15 @@ The data produced by the ingredients field type looks like this:
 ]
 ```
 
-`id` represents a relation to an entry of a collection named `"ingredients"`.
+In this example, `id` represents a relation to an entry.
 
-`amount` is an unformatted string holding information about how much to use of the referenced ingredient.
+`amount` is an unformatted string holding additional information about the reference.
+
+Note that both JSON keys can be configured, as well as the allowed content types for referenced entries.
+
+## Setup in Contentful
+
+
 
 ## Development
 
