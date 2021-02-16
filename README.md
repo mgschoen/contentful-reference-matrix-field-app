@@ -46,8 +46,31 @@ In this example, `id` represents a relation to an entry.
 
 Note that both JSON keys can be configured, as well as the allowed content types for referenced entries.
 
-## Setup in Contentful
+## Setup for Usage in Contentful
 
+(1) Build your app with `$ npm run build` and host the files found in `./build/` somewhere statically.
+
+(2) In your Contentful account, create a new private app. Give it a name and enter the URL that points to the hosted version of your `./build/` directory.
+
+(3) Under "Location", check "Entry field" and "JSON Object"
+
+(4) Under "Instance Parameter Defintions", add four instance parameters with the following IDs, each of them of type "Short text":
+
+  - `referenceKey`
+  - `textKey`
+  - `textLabel`
+  - `contentTypes`
+
+(5) Save the app and install it to the space(s) you like.
+
+(6) When you add or edit a JSON Object field in your content model, you should now see your app in the "Appearance" tab, along with fields for the instance parameters you configured. Fill them out as follows:
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `referenceKey`| the JSON key used for storing the referenced entry's id | `"id"` |
+| `textKey`| the JSON key used for storing the associated text | `"text"` |
+| `textLabel`| used as a placeholder for the text input fields | `"Text"` |
+| `contentTypes`| a comma separated list of content types that can be referenced (empty means all content types allowed) | `""` |
 
 
 ## Development
