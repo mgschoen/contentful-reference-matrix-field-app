@@ -87,7 +87,6 @@ const RepeatableReferenceField = (props: FieldProps) => {
             return rowData;
           })
         ]);
-        props.sdk.field.setValue(rows);
       })
       .catch(() => { /* do nothing */ });
   };
