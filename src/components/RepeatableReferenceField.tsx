@@ -12,6 +12,7 @@ import {
   TextInput
 } from '@contentful/forma-36-react-components';
 import { FieldExtensionSDK } from 'contentful-ui-extensions-sdk';
+import { v4 as uuid } from 'uuid';
 
 interface FieldProps {
   sdk: FieldExtensionSDK;
@@ -76,7 +77,7 @@ const RepeatableReferenceField = (props: FieldProps) => {
           ...rows,
           ...selectedRows.map((row) => {
             const rowData = {
-              key: `${row.sys.id}-${Math.floor(Math.random() * 100000)}`
+              key: uuid()
             };
             rowData[textKey] = '';
             rowData[referenceKey] = row.sys.id;
