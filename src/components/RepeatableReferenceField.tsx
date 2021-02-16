@@ -20,7 +20,10 @@ interface FieldProps {
 
 const RepeatableReferenceField = (props: FieldProps) => {
   const fieldValue = props.sdk.field.getValue();
-  const [rows, setRows] = useState(fieldValue || []);
+  const initialRows = fieldValue
+    ? fieldValue.map(value => ({...value, key: uuid()}))
+    : [];
+  const [rows, setRows] = useState(initialRows);
   const instanceParameters = props.sdk.parameters.instance;
   const referenceKey = instanceParameters.referenceKey || 'id';
   const textKey = instanceParameters.textKey || 'text';
