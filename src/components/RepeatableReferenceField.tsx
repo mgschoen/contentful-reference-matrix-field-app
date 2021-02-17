@@ -7,6 +7,7 @@ import {
   SkeletonContainer,
   TextInput,
   Paragraph,
+  Card,
 } from "@contentful/forma-36-react-components";
 import { FieldExtensionSDK } from "contentful-ui-extensions-sdk";
 import { v4 as uuid } from "uuid";
@@ -139,56 +140,50 @@ const RepeatableReferenceField = (props: FieldProps) => {
                         draggableId={`${row.id}-${index}`}
                         index={index}
                       >
-                        {(provided, snapshot) => {
+                        {(provided) => {
                           return (
                             <div
                               key={row.key}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               ref={provided.innerRef}
-                              className="row"
                               style={{
                                 userSelect: "none",
-                                backgroundColor: snapshot.isDragging
-                                  ? "#f7f9fa"
-                                  : "white",
-                                boxShadow: snapshot.isDragging
-                                  ? "0px 0px 0px 1px rgb(25 37 50 / 10%), 0px -6px 16px -6px rgb(25 37 50 / 3%), 0px 8px 16px -8px rgb(25 37 50 / 20%), 0px 13px 27px -5px rgb(25 37 50 / 15%)"
-                                  : "none",
                                 ...provided.draggableProps.style,
                               }}
                             >
-                              <div>
-                                <TextInput
-                                  value={row[textKey]}
-                                  placeholder={textLabel}
-                                  data-index={index}
-                                  onChange={onTextChanged}
-                                ></TextInput>
-                              </div>
-                              <div style={{ width: "200px" }}>
-                                {row.name ? (
-                                  <Paragraph>{row.name}</Paragraph>
-                                ) : (
-                                  <SkeletonContainer svgHeight="20">
-                                    <SkeletonBodyText numberOfLines="1"></SkeletonBodyText>
-                                  </SkeletonContainer>
-                                )}
-                              </div>
-                              <div>
-                                <EditorToolbarButton
-                                  icon="Delete"
-                                  data-index={index}
-                                  onClick={() => onDeleteButtonClicked(row)}
-                                ></EditorToolbarButton>
-                              </div>
+                              <Card className="row">
+                                <div>
+                                  <TextInput
+                                    value={row[textKey]}
+                                    placeholder={textLabel}
+                                    data-index={index}
+                                    onChange={onTextChanged}
+                                  ></TextInput>
+                                </div>
+                                <div style={{ width: "200px" }}>
+                                  {row.name ? (
+                                    <Paragraph>{row.name}</Paragraph>
+                                  ) : (
+                                    <SkeletonContainer svgHeight="20">
+                                      <SkeletonBodyText numberOfLines="1"></SkeletonBodyText>
+                                    </SkeletonContainer>
+                                  )}
+                                </div>
+                                <div className="delete">
+                                  <EditorToolbarButton
+                                    icon="Delete"
+                                    data-index={index}
+                                    onClick={() => onDeleteButtonClicked(row)}
+                                  ></EditorToolbarButton>
+                                </div>
+                              </Card>
                             </div>
                           );
                         }}
                       </Draggable>
                     );
                   })}
-
                   {provided.placeholder}
                 </div>
               );
