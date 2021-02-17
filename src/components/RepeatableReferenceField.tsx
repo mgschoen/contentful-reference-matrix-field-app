@@ -128,10 +128,10 @@ const RepeatableReferenceField = (props: FieldProps) => {
     <section>
       <div>
         <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
-          <Droppable droppableId="ingredients">
+          <Droppable droppableId="rows">
             {(provided) => {
               return (
-                <div ref={provided.innerRef} className="ingredients">
+                <div ref={provided.innerRef} className="rows">
                   {rows.map((row, index) => {
                     return (
                       <Draggable
@@ -146,7 +146,7 @@ const RepeatableReferenceField = (props: FieldProps) => {
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               ref={provided.innerRef}
-                              className="ingredient"
+                              className="row"
                               style={{
                                 userSelect: "none",
                                 backgroundColor: snapshot.isDragging

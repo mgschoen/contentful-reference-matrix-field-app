@@ -8,3 +8,28 @@ div {
   font: inherit;
   vertical-align: baseline;
 }
+
+.rows {
+  border-top: 1px solid #e5ebed;
+}
+
+.row {
+  display: flex;
+  padding: 0.9375rem 0;
+  align-items: center;
+  border-bottom: 1px solid #e5ebed;
+  border-left: 1px solid #e5ebed;
+  border-right: 1px solid #e5ebed;
+}
+
+.row:hover {
+  background-color: #f7f9fa;
+}
+
+.row > div {
+  padding: 0 1.25rem;
+}
+
+.delete {
+  margin-left: auto;
+}
