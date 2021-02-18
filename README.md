@@ -14,6 +14,7 @@ Inspired by [this video](https://www.youtube.com/watch?v=OtmV3TPTbRs) and bootst
 * Each object represents a tuple of
     * a relation to another entry
     * some arbitrary text
+* Items can be sorted via drag and drop
 * The following things can be configured:
     * JSON keys
     * Allowed content types for referenced entries
