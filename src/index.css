@@ -8,3 +8,16 @@ div {
   font: inherit;
   vertical-align: baseline;
 }
+
+.row {
+  display: flex;
+  padding: 0.9375rem 0;
+  align-items: center;
+}
+
+.row > div {
+  padding: 0 1.25rem;
+}
+.delete {
+  margin-left: auto;
+}
